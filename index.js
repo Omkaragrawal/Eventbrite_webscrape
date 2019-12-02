@@ -23,6 +23,8 @@ const data = [[
     "Shaikh"
   ]];
 
+const userEmail = '';
+const userPassword = '';
 app.use(morgan('combined'));
 app.listen(8080, () => {
     console.log('hosted on 8080');
@@ -37,10 +39,10 @@ app.listen(8080, () => {
     });
 
     if (page.url().includes('signin')) {
-        await page.type('#email', 'agrawalomkar.16@gmail.com');
+        await page.type('#email', userEmail);
         await page.click('[data-reactid *= "125"]');
         await page.waitForNavigation({waitUntil: 'networkidle0'});
-        await page.type('#password', 'abcd@1234');
+        await page.type('#password', userPassword);
         await page.click('[data-automation *="signup-submit"]');
         await page.waitForNavigation({ waitUntil: 'networkidle0' });
         register(page);
