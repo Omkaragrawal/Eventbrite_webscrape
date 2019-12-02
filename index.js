@@ -23,8 +23,6 @@ const data = [[
     "Shaikh"
   ]];
 
-const userEmail = '';
-const userPassword = '';
 app.use(morgan('combined'));
 app.listen(8080, () => {
     console.log('hosted on 8080');
@@ -34,15 +32,15 @@ app.listen(8080, () => {
         headless: false
     });
     const page = await browser.newPage();
-    await page.goto('https://www.eventbrite.com/attendees-add?eid=83168070939', {
+    await page.goto('https://www.eventbrite.com/attendees-add?eid=84591759229', {
         waitUntil: 'networkidle0'
     });
 
     if (page.url().includes('signin')) {
-        await page.type('#email', userEmail);
+        await page.type('#email', 'agrawalomkar.16@gmail.com');
         await page.click('[data-reactid *= "125"]');
         await page.waitForNavigation({waitUntil: 'networkidle0'});
-        await page.type('#password', userPassword);
+        await page.type('#password', 'abcd@1234');
         await page.click('[data-automation *="signup-submit"]');
         await page.waitForNavigation({ waitUntil: 'networkidle0' });
         register(page);
@@ -58,13 +56,13 @@ const register = async (page) => {
 }
 
 const fillForm = async (page, details) => {
-    await page.type('[maxLength *= "5"]', 1);
+    await page.type('[maxLength *= "5"]', '1');
     await page.click('#continue-attendee');
-    await page.waitForNavigation({ waitUntil: 'networkidle0' });
+    await page.waitForNavigation({ waitUntil: 'networkidle2' });
     await page.type('#last_name', details[2]);
     await page.type('#first_name', details[1]);
     await page.type('#email_address', details[0]);
     await page.click('[href *= "freeCheckout();"]');
     await page.waitForNavigation({ waitUntil: 'networkidle0' });
-    await page.goto('https://www.eventbrite.com/attendees-add?eid=83168070939', {waitUntil: 'networkidle0'});
+    await page.goto('https://www.eventbrite.com/attendees-add?eid=84591759229', {waitUntil: 'networkidle0'});
 };
