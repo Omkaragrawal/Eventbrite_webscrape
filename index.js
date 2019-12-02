@@ -2,26 +2,28 @@ const morgan = require('morgan');
 const express = require('express');
 const puppeteer = require('puppeteer');
 const app = express();
-const data = [[
-    "ishubhamsah@gmail.com",
-    "Shubham",
-    "Sah"
-  ],
-  [
-    "Shubhamsah227644@gmail.com",
-    "Shubham",
-    "Saha"
-  ],
-  [
-    "omkar3654@gmail.com",
-    "Omkar",
-    "Agarwal"
-  ],
-  [
-    "ialimustufaats@gmail.com",
-    "Ali Mustufa",
-    "Shaikh"
-  ]];
+const data = [
+    [
+        "ishubhamsah@gmail.com",
+        "Shubham",
+        "Sah"
+    ],
+    [
+        "Shubhamsah227644@gmail.com",
+        "Shubham",
+        "Saha"
+    ],
+    [
+        "omkar3654@gmail.com",
+        "Omkar",
+        "Agarwal"
+    ],
+    [
+        "ialimustufaats@gmail.com",
+        "Ali Mustufa",
+        "Shaikh"
+    ]
+];
 
 const registrarEmail = '';
 const registrarPassword = '';
@@ -37,19 +39,32 @@ app.listen(8080, () => {
     const page = await browser.newPage();
     await page.goto('https://www.eventbrite.com/attendees-add?eid=84591759229', {
         waitUntil: 'networkidle0',
-        timeout:0
+        timeout: 0
     });
 
     if (page.url().includes('signin')) {
         await page.type('#email', registrarEmail);
         await page.click('[data-reactid *= "125"]');
-        await page.waitForNavigation({waitUntil: 'networkidle0', timeout:0});
+        await page.waitForNavigation({
+            waitUntil: 'networkidle0',
+            timeout: 0
+        });
         await page.type('#password', registrarPassword);
         await page.click('[data-automation *="signup-submit"]');
-        await page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 0 });
-        register(page);
+        await page.waitForNavigation({
+            waitUntil: 'networkidle0',
+            timeout: 0
+        });
+        await register(page);
+        await browser.close();
+        console.log('Tickets successfully sent')
+        process.exit(0);
     } else {
-        register(page);
+        await register(page);
+        await browser.close();
+        console.log('Tickets successfully sent')
+
+        process.exit(0);
     }
 })();
 
@@ -62,7 +77,6 @@ const register = async (page) => {
 const fillForm = async (page, details) => {
     await page.type('[maxLength *= "5"]', '1');
     await page.click('#continue-attendee');
-    // await page.waitForNavigation({ waitUntil: 'load', timeout: 0 });
     await page.waitForSelector('#last_name');
     await page.type('#last_name', details[2]);
     await page.type('#first_name', details[1]);
@@ -70,6 +84,12 @@ const fillForm = async (page, details) => {
     await page.waitFor(3000);
     await page.waitForSelector('#last_name');
     await page.click('[href *= "freeCheckout();"]');
-    await page.waitForNavigation({ waitUntil: 'networkidle0', timeout:0 });
-    await page.goto('https://www.eventbrite.com/attendees-add?eid=84591759229', {waitUntil: 'load', timeout: 0});
+    await page.waitForNavigation({
+        waitUntil: 'networkidle0',
+        timeout: 0
+    });
+    await page.goto('https://www.eventbrite.com/attendees-add?eid=84591759229', {
+        waitUntil: 'load',
+        timeout: 0
+    });
 };
